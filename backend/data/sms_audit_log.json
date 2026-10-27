@@ -1,0 +1,13 @@
+[
+  {
+    "id": "sms_log_b441e2f352d9",
+    "timestamp": "2026-10-27T09:41:55.345Z",
+    "userId": "usr_d5fb289e8e60ed90",
+    "phoneE164": "+919876500001",
+    "provider": "Dev Sandbox",
+    "status": "dev_sandbox_echoed",
+    "locationId": "dima-hasao",
+    "riskLevel": "VERY HIGH",
+    "riskScore": 88
+  }
+]
