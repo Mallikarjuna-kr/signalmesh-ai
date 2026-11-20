@@ -178,6 +178,18 @@ export const LOCATIONS = [
 
 export const getLocation = (id) => LOCATIONS.find((l) => l.id === id);
 
+export function updateLiveLocations(newLocations) {
+  if (!Array.isArray(newLocations) || newLocations.length === 0) return;
+  newLocations.forEach((nLoc) => {
+    const existing = LOCATIONS.find((l) => l.id === nLoc.id);
+    if (existing) {
+      Object.assign(existing, nLoc);
+    } else {
+      LOCATIONS.push(nLoc);
+    }
+  });
+}
+
 export const FACTOR_META = [
   { key: "rainfall", label: "Rainfall (72 hrs)", icon: "CloudRain", color: "#3B82F6" },
   { key: "soilMoisture", label: "Soil Moisture", icon: "Droplet", color: "#FF8A00" },

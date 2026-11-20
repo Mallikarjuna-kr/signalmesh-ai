@@ -12,9 +12,10 @@ const TABS = ["Overview", "Factors", "History", "Impact", "Recommendations"];
 
 export default function RiskAnalysis() {
   const navigate = useNavigate();
-  const { selectedLocationId, setSelectedLocationId, triggerDeviceAlert } = useApp();
+  const { selectedLocationId, setSelectedLocationId, triggerDeviceAlert, locations } = useApp();
   const [tab, setTab] = useState("Factors");
-  const loc = getLocation(selectedLocationId) || LOCATIONS[0];
+  const currentLocations = locations && locations.length ? locations : LOCATIONS;
+  const loc = currentLocations.find((l) => l.id === selectedLocationId) || currentLocations[0];
   const color = riskColor(loc.riskLevel);
 
   return (
@@ -63,6 +64,25 @@ export default function RiskAnalysis() {
           </button>
         ))}
       </div>
+
+      {/* Live scientific telemetry strip */}
+      {loc.liveTelemetry && (
+        <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-blue-950/60 to-slate-900/80 border border-blue-500/30 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <strong className="text-white">Live Ground &amp; Satellite Telemetry:</strong>
+            <span className="text-slate-400">{loc.liveTelemetry.source}</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <span>72h Rain: <strong className="text-blue-400">{loc.liveTelemetry.rainLast72hMm} mm</strong></span>
+            <span>Soil Saturation: <strong className="text-amber-400">{(loc.liveTelemetry.soilMoistureVolumetric * 100).toFixed(0)}%</strong></span>
+            <span>Temperature: <strong className="text-white">{loc.liveTelemetry.temperature}°C</strong></span>
+            {loc.liveTelemetry.nearestEarthquake && (
+              <span>Nearest Seismic: <strong className="text-rose-400">M{loc.liveTelemetry.nearestEarthquake.mag} ({loc.liveTelemetry.nearestEarthquake.distKm}km)</strong></span>
+            )}
+          </div>
+        </div>
+      )}
 
       {tab === "Overview" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 animate-fade-up">

@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import { INITIAL_REPORTS } from "@/data/reports";
-import { LOCATIONS, getLocation } from "@/data/locations";
+import { LOCATIONS, getLocation, updateLiveLocations } from "@/data/locations";
+import { getEnrichedLiveLocations } from "@/services/realtimeTelemetry";
 
 const AppContext = createContext(null);
 export const useApp = () => useContext(AppContext);
@@ -61,6 +62,38 @@ export function AppProvider({ children }) {
     };
   });
   const [smsStatus, setSmsStatus] = useState(null);
+  const [locations, setLocations] = useState(LOCATIONS);
+  const [isLive, setIsLive] = useState(false);
+  const [liveLoading, setLiveLoading] = useState(false);
+  const [liveTimestamp, setLiveTimestamp] = useState(null);
+  const [seismicCount, setSeismicCount] = useState(0);
+
+  const refreshLiveTelemetry = useCallback(async (force = false) => {
+    setLiveLoading(true);
+    try {
+      const res = await getEnrichedLiveLocations(force);
+      if (res && res.locations && res.locations.length > 0) {
+        updateLiveLocations(res.locations);
+        setLocations([...res.locations]);
+        setIsLive(true);
+        setLiveTimestamp(res.timestamp || Date.now());
+        if (res.seismicCount !== undefined) setSeismicCount(res.seismicCount);
+      }
+    } catch (e) {
+      console.warn("Live telemetry sync error:", e);
+    } finally {
+      setLiveLoading(false);
+    }
+  }, []);
+
+  // Poll live telemetry on initial mount and periodically
+  useEffect(() => {
+    refreshLiveTelemetry(false);
+    const timer = setInterval(() => {
+      refreshLiveTelemetry(true);
+    }, 10 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, [refreshLiveTelemetry]);
 
   // Sync user state with localStorage
   useEffect(() => {
@@ -279,9 +312,15 @@ export function AppProvider({ children }) {
       emergencyAlert,
       triggerDeviceAlert,
       dismissEmergencyAlert,
+      locations,
+      isLive,
+      liveLoading,
+      liveTimestamp,
+      seismicCount,
+      refreshLiveTelemetry,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user, token, reports, layers, settings, selectedLocationId, emergencyAlert, smsStatus]
+    [user, token, reports, layers, settings, selectedLocationId, emergencyAlert, smsStatus, locations, isLive, liveLoading, liveTimestamp, seismicCount, refreshLiveTelemetry]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

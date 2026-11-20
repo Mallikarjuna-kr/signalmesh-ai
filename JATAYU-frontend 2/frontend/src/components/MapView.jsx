@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import { LOCATIONS, STATE_LABELS } from "@/data/locations";
 import { generateRiskPoints, generateRainfallPoints, riskColor } from "@/lib/risk";
+import { useApp } from "@/context/AppContext";
 
 const RISK_POINTS = generateRiskPoints(LOCATIONS);
 const RAIN_POINTS = generateRainfallPoints();
@@ -22,6 +23,9 @@ function pinIcon(color) {
 }
 
 export default function MapView({ layers, selectedId, onSelect, riskFilter = "All", flyTarget }) {
+  const { locations } = useApp() || {};
+  const currentLocations = locations && locations.length ? locations : LOCATIONS;
+
   const mapRef = useRef(null);
   const containerRef = useRef(null);
   const layerGroups = useRef({});
@@ -139,6 +143,33 @@ export default function MapView({ layers, selectedId, onSelect, riskFilter = "Al
       }).addTo(g);
     });
   }, []);
+
+  // Update primary markers dynamically whenever real-time telemetry changes
+  useEffect(() => {
+    const grp = layerGroups.current.markers;
+    if (!grp || !mapRef.current) return;
+    grp.clearLayers();
+    currentLocations.forEach((loc) => {
+      const color = riskColor(loc.riskLevel);
+      const m = L.marker([loc.latitude, loc.longitude], { icon: pinIcon(color) });
+      const liveInfo = loc.liveTelemetry
+        ? `<div style="font-size:11px;color:#38bdf8;margin-top:4px;border-top:1px solid #334155;padding-top:4px">
+            🛰️ <strong>Live Rain:</strong> ${loc.liveTelemetry.rainLast72hMm}mm<br/>
+            💧 <strong>Soil Saturation:</strong> ${(loc.liveTelemetry.soilMoistureVolumetric * 100).toFixed(0)}%
+           </div>`
+        : "";
+      m.bindPopup(
+        `<div style="min-width:180px">
+          <div style="font-weight:700;font-size:14px;color:#fff">${loc.name}, ${loc.state}</div>
+          <div style="color:${color};font-weight:700;margin-top:4px">${loc.riskLevel} Risk (${loc.riskScore}/100)</div>
+          ${liveInfo}
+        </div>`
+      );
+      m.on("click", () => onSelect && onSelect(loc.id));
+      markerRefs.current[loc.id] = m;
+      m.addTo(grp);
+    });
+  }, [currentLocations, onSelect]);
 
   // toggle layers on/off
   useEffect(() => {

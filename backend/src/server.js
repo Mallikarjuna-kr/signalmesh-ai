@@ -12,6 +12,7 @@ const snowflake = require('./snowflake');
 const identityStore = require('./identityStore');
 const smsService = require('./smsService');
 const deviceBridge = require('./deviceBridge');
+const realtimeService = require('./realtimeService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -136,6 +137,20 @@ app.get('/api/health', async (req, res) => {
     },
     sms: smsSummary
   });
+});
+
+/**
+ * GET /api/realtime/locations
+ * Fetches and returns live multi-spectral weather, soil moisture, and seismic data
+ * with dynamic landslide risk scores computed for all monitored Northeast locations.
+ */
+app.get('/api/realtime/locations', async (req, res) => {
+  try {
+    const data = await realtimeService.getRealtimeLocations();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // ---------------------------------------------------------------------

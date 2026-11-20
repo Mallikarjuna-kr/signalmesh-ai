@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
-import { Bell, Menu, ChevronDown, Smartphone } from "lucide-react";
+import { Bell, Menu, ChevronDown, Smartphone, RefreshCw } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 
 const META = {
@@ -18,7 +18,7 @@ const META = {
 
 export default function Header({ onMenu }) {
   const { pathname } = useLocation();
-  const { user, logout, triggerDeviceAlert } = useApp();
+  const { user, logout, triggerDeviceAlert, isLive, liveLoading, liveTimestamp, refreshLiveTelemetry } = useApp();
   const [menuOpen, setMenuOpen] = useState(false);
   const meta = META[pathname] || { title: "SignalMesh AI", desc: "" };
 
@@ -36,14 +36,19 @@ export default function Header({ onMenu }) {
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
-
-          <div className="hidden md:flex items-center gap-2 text-sm text-slate-400">
-            <span>Last Updated: <span className="text-slate-200 font-medium">03 May 2025 10:30 AM</span></span>
-            <span className="flex items-center gap-1.5 ml-1">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 pulse-dot" />
-              <span className="text-emerald-400 font-semibold">Live</span>
+          <button
+            onClick={() => refreshLiveTelemetry(true)}
+            disabled={liveLoading}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold shadow-sm transition-all cursor-pointer"
+            title="Fetch latest satellite rainfall, soil saturation & USGS seismic telemetry"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${liveLoading ? "animate-spin text-emerald-300" : ""}`} />
+            <span className="hidden sm:inline">
+              {liveLoading ? "Polling Satellites..." : isLive ? "Live API Feed (Open-Meteo & USGS)" : "Sync Live APIs"}
             </span>
-          </div>
+            <span className="sm:hidden">{liveLoading ? "Sync..." : "Live"}</span>
+            <span className="h-2 w-2 rounded-full bg-emerald-400 pulse-dot" />
+          </button>
 
           <button
             onClick={() => triggerDeviceAlert()}
