@@ -64,7 +64,6 @@ function renderSidebar(activeKey) {
       <img src="assets/img/signalmesh-logo.svg" alt="SignalMesh AI" style="width:42px;height:42px;border-radius:8px;" />
       <div class="sidebar__brand-text">
         <div class="name gold-text" style="font-size:16px;">SIGNALMESH AI</div>
-        <div class="tag" style="font-size:10px;color:#38bdf8;font-weight:600;">TEAM: APEX-AI-X</div>
       </div>
     </div>
     <nav class="nav-group">

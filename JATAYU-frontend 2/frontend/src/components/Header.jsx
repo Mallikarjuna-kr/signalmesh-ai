@@ -36,10 +36,6 @@ export default function Header({ onMenu }) {
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
-          <span className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
-            Team APEX-AI-X
-          </span>
 
           <div className="hidden md:flex items-center gap-2 text-sm text-slate-400">
             <span>Last Updated: <span className="text-slate-200 font-medium">03 May 2025 10:30 AM</span></span>

@@ -31,9 +31,6 @@ export default function Sidebar({ mobileOpen, onClose }) {
       {/* Branding */}
       <div className="px-4 pt-5 pb-3 relative">
         <img src="/signalmesh-logo.svg" alt="SignalMesh AI" className="w-full max-w-[210px] mx-auto drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]" />
-        <div className="mt-2 text-center text-[10px] font-semibold tracking-wider text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded-lg py-1 px-2 mx-1">
-          TEAM: APEX-AI-X
-        </div>
         <button onClick={onClose} className="lg:hidden absolute right-3 top-4 text-slate-400" data-testid="sidebar-close-btn">
           <X className="h-5 w-5" />
         </button>
@@ -73,7 +70,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
           <span>Logout</span>
         </button>
         <div className="text-[10px] text-slate-500 text-center tracking-wider uppercase pt-1">
-          SignalMesh AI · APEX-AI-X
+          SignalMesh AI
         </div>
       </div>
     </div>

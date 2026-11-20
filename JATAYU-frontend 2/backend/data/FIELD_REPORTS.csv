@@ -1,5 +1,0 @@
-ID,LOCATION_ID,LOCATION,SUBMITTED_BY,DATE,OBSERVATION,DESCRIPTION,AI_STATUS,CONFIDENCE,RISK_IMPACT,STATUS
-MFR-2025-0052,dima-hasao,Dima Hasao, Assam,S. Sharma,03 May 2025,Cracks on ground,"Longitudinal tension cracks expanding across hillside road embankment.",Verified,82,High → Very High,Verified
-MFR-2025-0053,champhai,Champhai, Mizoram,R. Lalthang,03 May 2025,Water seepage,"Unusual muddy groundwater discharge surfacing near retaining wall.",Verified,76,Moderate → High,Verified
-MFR-2025-0054,west-garo-hills,West Garo Hills, Meghalaya,D. Marak,02 May 2025,Slope deformation,"Downward soil displacement and tilting utility poles noticed.",Pending,0,—,Submitted
-MFR-2025-0055,peren,Peren, Nagaland,K. Angami,02 May 2025,Rockfall,"Minor loose rockfall on highway bypass during early morning drizzle.",Flagged,41,No change,Flagged

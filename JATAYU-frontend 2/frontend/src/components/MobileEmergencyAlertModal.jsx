@@ -509,7 +509,7 @@ export default function MobileEmergencyAlertModal({ alertData, onClose }) {
 
           {/* Simulated Hazard Disclaimer */}
           <div className="text-center text-[10px] text-slate-500 italic">
-            * Simulated Hazard Notice: Demonstration risk metrics are simulated for APEX-AI-X evaluation purposes.
+            * Simulated Hazard Notice: Demonstration risk metrics are simulated for evaluation purposes.
           </div>
 
           <button

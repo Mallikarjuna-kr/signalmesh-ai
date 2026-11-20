@@ -332,9 +332,6 @@ export default function Login() {
             <span>Environment</span><span className="text-slate-500">|</span>
             <span>Resilient Northeast</span>
           </div>
-          <div className="text-[11px] font-semibold text-blue-400 tracking-wider uppercase">
-            Team: APEX-AI-X
-          </div>
         </div>
       </div>
     </div>
