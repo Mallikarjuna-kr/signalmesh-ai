@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "JATAYU-frontend 2/frontend/build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
